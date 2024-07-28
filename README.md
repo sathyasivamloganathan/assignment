@@ -35,18 +35,7 @@ Ensure you have the following installed on your machine:
 3. Middleware for checking login status.
 4. Expense creation and management.
 5. Downloading balance sheet as a PDF.
-
-## Routes
-## Auth Routes
-1. POST /auth/register - Register a new user.
-2. GET /auth/login - Login an existing user.
-3. GET /auth/getUser/:id - Get user details by ID.
-## Expense Routes
-1. POST /expense/expenseSave - Create a new expense.
-2. GET /expense/individualExpense - Get individual expenses of a logged-in user.
-3. GET /expense/downloadBalanceSheet - Download balance sheet as a PDF.
-
-
+   
 ## User Authentication and Authorization
 User authentication and authorization are handled using Passport.js with a local strategy.<br />
 
@@ -71,6 +60,48 @@ Amount: Must be a positive number and not empty.<br />
 Participants: Must be an array.<br />
 SplitType: Must be one of "equal", "exact", or "percentage" and not empty.<br />
 
+## Routes
+## Auth Routes
+1. POST /auth/register - Register a new user.
+2. GET /auth/login - Login an existing user.
+3. GET /auth/getUser/:id - Get user details by ID.
+## Expense Routes
+1. POST /expense/expenseSave - Create a new expense.
+2. GET /expense/individualExpense - Get individual expenses of a logged-in user.
+3. GET /expense/downloadBalanceSheet - Download balance sheet as a PDF.<br />
+
+## 
+1. Login Request with Thunder Client after Registration
+   Endpoint: GET http://localhost:8080/api/auth/login
+      ```bash
+      {
+        "email": "Enter email address",
+        "password": "Enter password"
+      }
+      ```
+   On successful login cookies are generated.<br />
+
+2. Add Expense Request <br />
+Endpoint: POST http://localhost:8080/api/expense/expenseSave<br />
+      ```bash
+      {
+        "description": "Dinner",
+        "paidBy": "66a64c5e19cb81b30651cad0",
+        "amount": 800,
+        "participants": [
+          {"user": "66a64af609bbdaa411d22904"},
+          {"user": "66a5093c44c0c51ab91164c8"}
+        ],
+        "splitType": "equal"
+      }
+      ```
+The paidBy user id is got from the login cookies. If split Type is percentage, then in participants array next to user percentage must be provided to split amount into given percentage.<br />
+
+3. Individual Expense Request<br />
+Endpoint: GET http://localhost:8080/api/expense/individualExpense<br />
+Authentication: Cookie-based session<br />
+Upon a successful request, the response will include the total amount the user owes and details of each individual expense they are part of. Also it provides the description of the amount spend, paidBy name and their details, Individual amount needs to be paid for the session. <br />
+
 ## Login Middleware<br />
 This middleware checks if the user is authenticated by verifying the presence of the user object in the request. If the user is not authenticated, it responds with a "Not Logged In" message.<br />
 
@@ -78,6 +109,10 @@ This middleware checks if the user is authenticated by verifying the presence of
 Auth Helper:<br />
 1. hashPassword: Hashes the user's password using bcrypt before saving it to the database.<br />
 2. comparePassword: Compares a plain text password with a hashed password.<br />
-Balance Sheet Helper:<br />
+## Balance Sheet Helper:<br />
+Endpoint: GET http://localhost:8080/api/expense/downloadBalanceSheet<br />
 generateBalanceSheet: Generates a PDF balance sheet for the user's expenses, detailing each expense, who paid, and the user's share.<br />
+1. Send the Request: Make sure the user is logged in and has a valid session. Send the GET request to the downloadBalanceSheet endpoint.<br />
+2. Receive the Response: The server will process the request and generate a PDF file containing the balance sheet.<br />
+3. Download the File: Your browser or API client tool will prompt you to download the PDF file. Save it to your desired location.<br />
 ![Balance Sheet](https://github.com/sathyasivamloganathan/assignment/blob/main/BalanceSheet/Balance%20Sheet.png)
