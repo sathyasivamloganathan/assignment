@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 const generateBalanceSheet = (expenses, userId, res) => {
   const doc = new PDFDocument();
-  const filePath = path.join(__dirname, "../tmp", "balance_sheet.pdf");
+  const filePath = path.join(__dirname, "../BalanceSheet", "balance_sheet.pdf");
 
   let totalAmount = 0;
   let individualExpenses = [];
