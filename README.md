@@ -1,4 +1,4 @@
-## Expense Management System
+## Expense Management System - Convin AI
 This project is an Expense Management System built using Node.js, Express, MongoDB, and Passport.js for user authentication. It allows users to register, login, create expenses, get individual expense and download a balance sheet of their expenses.
 
 # Server Installation and Setup
